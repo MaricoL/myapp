@@ -1,32 +1,53 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+  <div>
+    hello vue --- {{ myname }}
+    <br>
+    <input type="text" v-model="content">
+    <button @click="handleClick">提交</button>
+    <ul>
+      <li v-for="data in dataList" :key="data">{{ data }}</li>
+    </ul>
+
+    <navbar>
+      <button @click=" isShow = !isShow">slot-button</button>
+    </navbar>
+    <sidebar v-show="isShow"></sidebar>
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import navbar from './components/Navbar'
+import sidebar from './components/Sidebar'
+// import Vue from 'vue'
 
-#nav {
-  padding: 30px;
+// 全局注册组件
+// Vue.component('navbar', navbar)
+// Vue.component('sidebar', sidebar)
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+export default {
+  data () {
+    return {
+      myname: 'zhangsan',
+      content: '',
+      dataList: [],
+      isShow: true
     }
+  },
+  methods: {
+    handleClick () {
+      this.dataList.push(this.content)
+    }
+  },
+  // 局部注册组件
+  components: {
+    navbar,
+    sidebar
   }
+}
+</script>
+
+<style scoped>
+li {
+  background-color: #f00;
 }
 </style>
