@@ -12,9 +12,10 @@
       <button @click=" isShow = !isShow">slot-button</button>
     </navbar>
     <sidebar v-show="isShow"></sidebar>
+
+      <router-view></router-view>
   </div>
 
-  <!-- <router-view></router-view> -->
 </template>
 
 <script>
