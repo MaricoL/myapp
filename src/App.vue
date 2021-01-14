@@ -13,6 +13,8 @@
     </navbar>
     <sidebar v-show="isShow"></sidebar>
   </div>
+
+  <!-- <router-view></router-view> -->
 </template>
 
 <script>
