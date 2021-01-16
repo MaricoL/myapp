@@ -32,11 +32,12 @@ export default {
     height: 50px;
     line-height: 25px;
     text-align: center;
+    z-index: 99;
 
     ul {
       margin: 0;
       padding: 0;
-      // list-style: none;
+      background-color: #eee;
       display: flex;
 
       li {

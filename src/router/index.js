@@ -22,11 +22,11 @@ const routes = [
     component: Cinema
   },
   // 1-动态路由
-  // {
-  //   path: '/detail/:filmId',
-  //   name: 'Detail',
-  //   component: Detail
-  // },
+  {
+    path: '/detail/:filmId',
+    name: 'Detail',
+    component: Detail
+  },
   // 2-命名路由
   // {
   //   path: '/detail/:id',
@@ -34,10 +34,10 @@ const routes = [
   //   component: Detail
   // },
   // 3-query方式路由
-  {
-    path: '/detail',
-    component: Detail
-  },
+  // {
+  //   path: '/detail',
+  //   component: Detail
+  // },
   {
     path: '/film',
     name: 'Film',

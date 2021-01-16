@@ -1,7 +1,9 @@
 <template>
   <div>
     <tabbar></tabbar>
-    <router-view></router-view>
+    <section>
+      <router-view></router-view>
+    </section>
   </div>
 </template>
 
@@ -21,5 +23,9 @@ export default {
   }
   ul {
     list-style: none;
+  }
+
+  section {
+    margin-bottom: 50px;
   }
 </style>
