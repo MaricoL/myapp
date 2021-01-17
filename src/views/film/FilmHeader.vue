@@ -19,6 +19,7 @@ export default {
     height: 50px;
     line-height: 50px;
     text-align: center;
+    z-index: 99;
     li {
       flex: 1;
     }

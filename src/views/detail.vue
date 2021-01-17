@@ -27,7 +27,7 @@
       <div class="photos">
         <h3>剧照</h3>
         <detail-swiper :presildesNum="2" swiperclass="swiper-photos">
-          <div class="swiper-slide" v-for="(photo,index) in filmInfo.photos" :key="index">
+          <div class="swiper-slide" v-for="(photo,index) in filmInfo.photos" :key="index" @click="handleClick(index)">
             <img :src="photo">
           </div>
         </detail-swiper>
@@ -42,6 +42,7 @@ import moment from 'moment'
 import Vue from 'vue'
 import detailSwiper from '@/views/DetailSwiper.vue'
 import detailHeader from '@/views/DetailHeader.vue'
+import { ImagePreview } from 'vant'
 
 Vue.directive('top', {
   inserted (el) {
@@ -58,8 +59,7 @@ Vue.directive('top', {
   unbind () {
     window.onscroll = null
   }
-}
-)
+})
 
 Vue.filter('dataFilter', (dataStr) => {
   // dataStr 为秒数，需要 *1000 转换为毫秒
@@ -90,6 +90,17 @@ export default {
   components: {
     detailSwiper,
     detailHeader
+  },
+  methods: {
+    handleClick (index) {
+      ImagePreview({
+        images: this.filmInfo.photos,
+        startPosition: index,
+        loop: false,
+        closeable: true,
+        closeIconPosition: 'top-left'
+      })
+    }
   }
 }
 </script>

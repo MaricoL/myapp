@@ -1,4 +1,15 @@
 <template>
+  <div>
+    <van-nav-bar title="标题">
+      <template #left>
+        <span style="margin-right: 5px;">上海</span><van-icon name="arrow-down" size="8" color="#000"/>
+      </template>
+      <template #right>
+        <van-icon name="search" size="23" color="#000"/>
+      </template>
+
+    </van-nav-bar>
+
     <div class="cinema" :style="{height:height}">
       <ul>
         <li v-for="(cinema) in cinemaList" :key="cinema.cinemaId">
@@ -7,12 +18,17 @@
         </li>
       </ul>
     </div>
+  </div>
 </template>
 
 <script>
 // import axios from 'axios'
 import http from '@/utils/http'
 import BetterScroll from 'better-scroll'
+import Vue from 'vue'
+import { NavBar, Icon } from 'vant'
+
+Vue.use(NavBar).use(Icon)
 
 export default {
   data () {
@@ -23,7 +39,7 @@ export default {
   },
   mounted () {
     // 配合 scroll-bar 设置 ul 的高度
-    this.height = document.documentElement.clientHeight - 50 + 'px'
+    this.height = document.documentElement.clientHeight - 100 + 'px'
     http({
       url: 'gateway?cityId=310100&ticketFlag=1&k=7833457',
       headers: {
