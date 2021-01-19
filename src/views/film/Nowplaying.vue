@@ -65,7 +65,8 @@ export default {
       this.$router.push(`/detail/${id}`)
     },
     onLoad () {
-      if (this.dataList.length === this.total) {
+      // this.dataList.length !== 0：避免从详情页面返回时，滚动条如果已经改变了位置，则会首次出发onLoad方法，此时this.dataList.length=this.total=0
+      if (this.dataList.length === this.total && this.dataList.length !== 0) {
         this.finished = true
         return
       }

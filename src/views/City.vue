@@ -1,7 +1,7 @@
 <template>
   <div>
-    <van-index-bar>
-      <div v-for="cities in cityList" :key="cities.type">
+    <van-index-bar :index-list="computedCitiesList" @select="handleSelect">
+      <div v-for="cities in citiesList" :key="cities.type">
         <van-index-anchor  :index="cities.type" />
         <van-cell v-for="(city,index) in cities.list" :key="index" :title="city.name" />
       </div>
@@ -12,14 +12,19 @@
 <script>
 import Vue from 'vue'
 import http from '@/utils/http'
-import { IndexBar, IndexAnchor, Cell } from 'vant'
+import { IndexBar, IndexAnchor, Cell, Toast } from 'vant'
 
-Vue.use(IndexBar).use(Cell).use(IndexAnchor)
+Vue.use(IndexBar).use(Cell).use(IndexAnchor).use(Toast)
 
 export default {
   data () {
     return {
-      cityList: []
+      citiesList: []
+    }
+  },
+  computed: {
+    computedCitiesList () {
+      return this.citiesList.map(cities => cities.type)
     }
   },
   mounted () {
@@ -30,34 +35,40 @@ export default {
       }
     })
       .then(res => {
-        this.cityList = res.data.data.cities
-        this.resolveCityData(res.data.data.cities)
+        this.citiesList = this.resolveCityData(res.data.data.cities)
       })
   },
   methods: {
     resolveCityData (cities) {
       console.log(cities)
       const indexArr = []
-      const cityArr = []
+      const citiesArr = []
       for (let i = 65; i <= 90; i++) {
         indexArr.push(String.fromCharCode(i))
       }
       indexArr.forEach(letter => {
         const list = cities.filter(item => item.pinyin.toUpperCase().startsWith(letter))
         if (list.length > 0) {
-          cityArr.push({
+          citiesArr.push({
             type: letter,
             list: list
           })
         }
       })
-      console.log(cityArr)
-      return cityArr
+      console.log(citiesArr)
+      return citiesArr
+    },
+    handleSelect (index) {
+      Toast({
+        message: index
+      })
     }
   }
 }
 </script>
 
 <style>
-
+  .van-toast{
+    min-width: unset
+  }
 </style>
