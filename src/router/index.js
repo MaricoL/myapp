@@ -6,6 +6,7 @@ import Film from '../views/Film.vue'
 import Nowplaying from '../views/film/Nowplaying.vue'
 import Comingsoon from '../views/film/Comingsoon.vue'
 import Detail from '../views/Detail.vue'
+import City from '../views/City.vue'
 // import Login from '../views/Login.vue'
 
 Vue.use(VueRouter)
@@ -60,6 +61,11 @@ const routes = [
         redirect: 'nowplaying'
       }
     ]
+  },
+  {
+    path: '/city',
+    name: 'City',
+    component: City
   },
   // {
   //   path: '/login',

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-nav-bar title="标题">
+    <van-nav-bar title="标题"   @click-left="onClickLeft">
       <template #left>
         <span style="margin-right: 5px;">上海</span><van-icon name="arrow-down" size="8" color="#000"/>
       </template>
@@ -85,6 +85,11 @@ export default {
     // }).then(res => {
     //   console.log(res.data)
     // })
+  },
+  methods: {
+    onClickLeft () {
+      this.$router.push('/city')
+    }
   }
 }
 </script>
