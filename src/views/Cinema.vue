@@ -2,7 +2,7 @@
   <div>
     <van-nav-bar title="标题"   @click-left="onClickLeft">
       <template #left>
-        <span style="margin-right: 5px;">上海</span><van-icon name="arrow-down" size="8" color="#000"/>
+        <span style="margin-right: 5px;">{{ $store.state.cityName }}</span><van-icon name="arrow-down" size="8" color="#000"/>
       </template>
       <template #right>
         <van-icon name="search" size="23" color="#000"/>
@@ -12,7 +12,7 @@
 
     <div class="cinema" :style="{height:height}">
       <ul>
-        <li v-for="(cinema) in cinemaList" :key="cinema.cinemaId">
+        <li v-for="(cinema) in $store.state.cinemaList" :key="cinema.cinemaId">
           <div>{{ cinema.name }}</div>
           <div class="address">{{ cinema.address }}</div>
         </li>
@@ -23,7 +23,6 @@
 
 <script>
 // import axios from 'axios'
-import http from '@/utils/http'
 import BetterScroll from 'better-scroll'
 import Vue from 'vue'
 import { NavBar, Icon } from 'vant'
@@ -40,14 +39,20 @@ export default {
   mounted () {
     // 配合 scroll-bar 设置 ul 的高度
     this.height = document.documentElement.clientHeight - 100 + 'px'
-    http({
-      url: 'gateway?cityId=310100&ticketFlag=1&k=7833457',
-      headers: {
-        'X-Host': 'mall.film-ticket.cinema.list'
-      }
-    }).then(res => {
-      this.cinemaList = res.data.data.cinemas
-
+    // 将电影院列表请求交给vuex管理
+    if (this.$store.state.cinemaList.length === 0) {
+      this.$store.dispatch('getCinemaList', this.$store.state.cityId)
+        .then(res => {
+          this.$nextTick(() => {
+            new BetterScroll('.cinema', {
+              scrollbar: {
+                fade: true
+              }
+            })
+          })
+        })
+    } else {
+      console.log('缓存')
       this.$nextTick(() => {
         new BetterScroll('.cinema', {
           scrollbar: {
@@ -55,7 +60,8 @@ export default {
           }
         })
       })
-    })
+    }
+
     // 1. 魅力惠
     // 直接请求api，由于 魅力惠服务器 设置了 ccess-Control-Allow-Origin: * ，
     // 所以没有跨域问题

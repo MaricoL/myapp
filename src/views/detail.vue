@@ -74,6 +74,8 @@ export default {
     }
   },
   mounted () {
+    // 隐藏 Tabbar
+    this.$store.commit('hide')
     http({
       url: `/gateway?filmId=${this.$route.params.filmId}&k=1074795`,
       headers: {
@@ -86,6 +88,10 @@ export default {
     // console.log('获取动态路由传递过来的参数：', this.$route.params.filmId)
     // console.log('获取命名路由传递过来的参数：', this.$route.params.id)
     // console.log('获取query方式路由传递过来的参数：', this.$route.query.id)
+  },
+  beforeDestroy () {
+    // 显示 Tabbar
+    this.$store.commit('show')
   },
   components: {
     detailSwiper,

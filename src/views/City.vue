@@ -3,7 +3,7 @@
     <van-index-bar :index-list="computedCitiesList" @select="handleSelect">
       <div v-for="cities in citiesList" :key="cities.type">
         <van-index-anchor  :index="cities.type" />
-        <van-cell v-for="(city,index) in cities.list" :key="index" :title="city.name" />
+        <van-cell v-for="(city,index) in cities.list" :key="index" :title="city.name" @click="handleChangePage(city.name,city.cityId)"/>
       </div>
     </van-index-bar>
   </div>
@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     resolveCityData (cities) {
-      console.log(cities)
+      // console.log(cities)
       const indexArr = []
       const citiesArr = []
       for (let i = 65; i <= 90; i++) {
@@ -55,13 +55,20 @@ export default {
           })
         }
       })
-      console.log(citiesArr)
+      // console.log(citiesArr)
       return citiesArr
     },
     handleSelect (index) {
       Toast({
         message: index
       })
+    },
+    handleChangePage (cityName, cityId) {
+      // 直接改变state不安全
+      // this.$store.state.cityName = cityName
+      this.$store.commit('changeCityName', cityName)
+      this.$store.commit('changeCityId', cityId)
+      this.$router.back()
     }
   }
 }
