@@ -1,50 +1,49 @@
 <template>
   <div>
-    <van-nav-bar title="标题" @click-left="onClickLeft" @click-right="onClickRight">
-      <template #left>
-        <span style="margin-right: 5px;">{{ $store.state.cityName }}</span><van-icon name="arrow-down" size="8" color="#000"/>
-      </template>
-      <template #right>
-        <van-icon name="search" size="23" color="#000"/>
-      </template>
-
-    </van-nav-bar>
+    <van-search
+      v-model="value"
+      show-action
+      placeholder="请输入搜索关键词"
+      @search="onSearch"
+      @cancel="onCancel"
+    />
 
     <div class="cinema" :style="{height:height}">
       <van-list>
-        <van-cell v-for="(cinema) in $store.state.cinemaList" :key="cinema.cinemaId">
+        <van-cell v-for="(cinema) in cinemaList" :key="cinema.cinemaId">
           <div>{{ cinema.name }}</div>
           <div class="address">{{ cinema.address }}</div>
         </van-cell>
       </van-list>
     </div>
+
   </div>
 </template>
 
 <script>
-// import axios from 'axios'
-import BetterScroll from 'better-scroll'
 import Vue from 'vue'
-import { NavBar, Icon, List, Cell } from 'vant'
+import { Search, List, Cell } from 'vant'
+import BetterScroll from 'better-scroll'
 
-Vue.use(NavBar).use(Icon).use(List).use(Cell)
+Vue.use(Search).use(List).use(Cell)
 
 export default {
   data () {
     return {
+      value: '',
+      height: 0,
       cinemaList: [],
-      height: 0
+      bs: null
     }
   },
   mounted () {
-    // 配合 scroll-bar 设置 ul 的高度
     this.height = document.documentElement.clientHeight - 100 + 'px'
-    // 将电影院列表请求交给vuex管理
     if (this.$store.state.cinemaList.length === 0) {
       this.$store.dispatch('getCinemaList', this.$store.state.cityId)
         .then(res => {
+          this.cinemaList = this.$store.state.cinemaList
           this.$nextTick(() => {
-            new BetterScroll('.cinema', {
+            this.bs = new BetterScroll('.cinema', {
               scrollbar: {
                 fade: true
               }
@@ -53,8 +52,9 @@ export default {
         })
     } else {
       console.log('缓存')
+      this.cinemaList = this.$store.state.cinemaList
       this.$nextTick(() => {
-        new BetterScroll('.cinema', {
+        this.bs = new BetterScroll('.cinema', {
           scrollbar: {
             fade: true
           }
@@ -62,14 +62,22 @@ export default {
       })
     }
   },
+  computed: {
+    // computedCinemaList () {
+    //   return this.$store.state.cinemaList.filter(cinema =>
+    //     cinema.name.toUpperCase().includes(this.value.toUpperCase()) || cinema.address.toUpperCase().includes(this.value.toUpperCase()))
+    // }
+  },
   methods: {
-    onClickLeft () {
-      // 清空CinemaList
-      this.$store.commit('clearCinemaList')
-      this.$router.push('/city')
+    onSearch () {
+      this.cinemaList = this.$store.state.cinemaList.filter(cinema =>
+        cinema.name.toUpperCase().includes(this.value.toUpperCase()) || cinema.address.toUpperCase().includes(this.value.toUpperCase()))
+      this.$nextTick(() => {
+        this.bs.refresh()
+      })
     },
-    onClickRight () {
-      this.$router.push('/cinema/search')
+    onCancel () {
+      this.$router.replace('/cinema')
     }
   }
 }

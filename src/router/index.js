@@ -7,6 +7,7 @@ import Nowplaying from '../views/film/Nowplaying.vue'
 import Comingsoon from '../views/film/Comingsoon.vue'
 import Detail from '../views/Detail.vue'
 import City from '../views/City.vue'
+import Search from '../views/Search.vue'
 // import Login from '../views/Login.vue'
 
 Vue.use(VueRouter)
@@ -21,6 +22,11 @@ const routes = [
     path: '/cinema',
     name: 'Cinema',
     component: Cinema
+  },
+  {
+    path: '/cinema/Search',
+    name: 'Search',
+    component: Search
   },
   // 1-动态路由
   {

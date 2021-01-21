@@ -26,6 +26,9 @@ export default new Vuex.Store({
     },
     setCinemaList (state, cinemaList) {
       state.cinemaList = cinemaList
+    },
+    clearCinemaList (state) {
+      state.cinemaList = []
     }
   },
   actions: {
