@@ -2,7 +2,7 @@
   <div>
     <van-nav-bar title="标题" @click-left="onClickLeft" @click-right="onClickRight">
       <template #left>
-        <span style="margin-right: 5px;">{{ $store.state.cityName }}</span><van-icon name="arrow-down" size="8" color="#000"/>
+        <span style="margin-right: 5px;">{{ cityName }}</span><van-icon name="arrow-down" size="8" color="#000"/>
       </template>
       <template #right>
         <van-icon name="search" size="23" color="#000"/>
@@ -12,7 +12,7 @@
 
     <div class="cinema" :style="{height:height}">
       <van-list>
-        <van-cell v-for="(cinema) in $store.state.cinemaList" :key="cinema.cinemaId">
+        <van-cell v-for="(cinema) in cinemaList" :key="cinema.cinemaId">
           <div>{{ cinema.name }}</div>
           <div class="address">{{ cinema.address }}</div>
         </van-cell>
@@ -26,22 +26,28 @@
 import BetterScroll from 'better-scroll'
 import Vue from 'vue'
 import { NavBar, Icon, List, Cell } from 'vant'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 Vue.use(NavBar).use(Icon).use(List).use(Cell)
 
 export default {
   data () {
     return {
-      cinemaList: [],
       height: 0
     }
   },
+  computed: {
+    ...mapState('CityModule', ['cityName', 'cityId']),
+    ...mapState('CinemaModule', ['cinemaList'])
+  },
+
   mounted () {
+    // console.log(mapState('CityModule', ['cityName']))
     // 配合 scroll-bar 设置 ul 的高度
     this.height = document.documentElement.clientHeight - 100 + 'px'
     // 将电影院列表请求交给vuex管理
-    if (this.$store.state.cinemaList.length === 0) {
-      this.$store.dispatch('getCinemaList', this.$store.state.cityId)
+    if (this.cinemaList.length === 0) {
+      this.getCinemaList(this.cityId)
         .then(res => {
           this.$nextTick(() => {
             new BetterScroll('.cinema', {
@@ -62,10 +68,14 @@ export default {
       })
     }
   },
+
   methods: {
+    ...mapMutations('CinemaModule', ['clearCinemaList']),
+    ...mapActions('CinemaModule', ['getCinemaList']),
+
     onClickLeft () {
       // 清空CinemaList
-      this.$store.commit('clearCinemaList')
+      this.clearCinemaList()
       this.$router.push('/city')
     },
     onClickRight () {

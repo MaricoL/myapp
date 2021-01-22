@@ -44,6 +44,8 @@ import detailSwiper from '@/views/DetailSwiper.vue'
 import detailHeader from '@/views/DetailHeader.vue'
 import { ImagePreview } from 'vant'
 
+import { mapMutations } from 'vuex'
+
 Vue.directive('top', {
   inserted (el) {
     el.style.display = 'none'
@@ -75,7 +77,7 @@ export default {
   },
   mounted () {
     // 隐藏 Tabbar
-    this.$store.commit('hide')
+    this.hide()
     http({
       url: `/gateway?filmId=${this.$route.params.filmId}&k=1074795`,
       headers: {
@@ -91,13 +93,14 @@ export default {
   },
   beforeDestroy () {
     // 显示 Tabbar
-    this.$store.commit('show')
+    this.show()
   },
   components: {
     detailSwiper,
     detailHeader
   },
   methods: {
+    ...mapMutations('TabbarModule', ['hide', 'show']),
     handleClick (index) {
       ImagePreview({
         images: this.filmInfo.photos,

@@ -10,7 +10,7 @@
 
     <div class="cinema" :style="{height:height}">
       <van-list>
-        <van-cell v-for="(cinema) in cinemaList" :key="cinema.cinemaId">
+        <van-cell v-for="(cinema) in currCinemaList" :key="cinema.cinemaId">
           <div>{{ cinema.name }}</div>
           <div class="address">{{ cinema.address }}</div>
         </van-cell>
@@ -24,6 +24,7 @@
 import Vue from 'vue'
 import { Search, List, Cell } from 'vant'
 import BetterScroll from 'better-scroll'
+import { mapState, mapActions } from 'vuex'
 
 Vue.use(Search).use(List).use(Cell)
 
@@ -32,16 +33,20 @@ export default {
     return {
       value: '',
       height: 0,
-      cinemaList: [],
+      currCinemaList: [],
       bs: null
     }
   },
+  computed: {
+    ...mapState('CityModule', ['cityName', 'cityId']),
+    ...mapState('CinemaModule', ['cinemaList'])
+  },
   mounted () {
     this.height = document.documentElement.clientHeight - 100 + 'px'
-    if (this.$store.state.cinemaList.length === 0) {
-      this.$store.dispatch('getCinemaList', this.$store.state.cityId)
+    if (this.cinemaList.length === 0) {
+      this.getCinemaList(this.cityId)
         .then(res => {
-          this.cinemaList = this.$store.state.cinemaList
+          this.currCinemaList = this.cinemaList
           this.$nextTick(() => {
             this.bs = new BetterScroll('.cinema', {
               scrollbar: {
@@ -52,7 +57,6 @@ export default {
         })
     } else {
       console.log('缓存')
-      this.cinemaList = this.$store.state.cinemaList
       this.$nextTick(() => {
         this.bs = new BetterScroll('.cinema', {
           scrollbar: {
@@ -62,15 +66,10 @@ export default {
       })
     }
   },
-  computed: {
-    // computedCinemaList () {
-    //   return this.$store.state.cinemaList.filter(cinema =>
-    //     cinema.name.toUpperCase().includes(this.value.toUpperCase()) || cinema.address.toUpperCase().includes(this.value.toUpperCase()))
-    // }
-  },
   methods: {
+    ...mapActions('CinemaModule', ['getCinemaList']),
     onSearch () {
-      this.cinemaList = this.$store.state.cinemaList.filter(cinema =>
+      this.currCinemaList = this.cinemaList.filter(cinema =>
         cinema.name.toUpperCase().includes(this.value.toUpperCase()) || cinema.address.toUpperCase().includes(this.value.toUpperCase()))
       this.$nextTick(() => {
         this.bs.refresh()
