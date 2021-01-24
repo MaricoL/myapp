@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- 不加 viewport meta 标签，在移动端点击时会有300ms的延迟 -->
+  <!-- <meta name="viewport" content="width=device-width,initial-scale=1.0"> -->
+
+  <title>
+    300ms延迟
+  </title>
+</head>
+
+<body>
+  <button ontouchstart="handleTouchStart()" onclick="handleClick()">111</button>
+</body>
+
+
+<script>
+  handleClick = () => {
+    console.log('click：' + +new Date());
+  }
+
+  handleTouchStart = () => {
+    console.log('touchStart' + +new Date());
+  }
+</script>
+
+</html>
