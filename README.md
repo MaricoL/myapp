@@ -1,5 +1,8 @@
 # myapp
 
+千峰VUE全套教程从入门到精通
+卖座网
+
 ## Project setup
 ```
 npm install
